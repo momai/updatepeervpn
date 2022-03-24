@@ -52,6 +52,7 @@ dpkg-deb --build $deb/package mypeervpn.deb
 
 #публикуем
 aptly repo add test2 mypeervpn.deb
+aptly publish repo -skip-signing test2
 
 
 fi
