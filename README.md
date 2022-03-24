@@ -8,6 +8,11 @@
 
 > apt-get install aptly
 
+* Перенести конфиг
+> mv /root/.aptly.conf /etc/aptly.conf
+
+Прописать в нём путь "rootDir": "/opt/aptly",
+
 * Создать репозиторий test2:
 
 > aptly repo create -distribution="bionic" test2
@@ -18,6 +23,31 @@
 > 
 * Полученный репозиторий опубликовать в web, в случае использования ubuntu достаточно указать в виртуальном хосте apache2 ссылку указанную в сообщении после публикации. К примеру: /root/.aptly/public/
 Либо сделать симлинк в рабочую папку web, как правило это /var/www/html
+Можно создать отдельный, или заменить существующий файл /etc/apache2/sites-available/000-default.conf
+
+><VirtualHost *:80>
+>
+>ServerName repo.lab
+>
+>ServerAdmin webmaster@localhost
+>
+>DocumentRoot /opt/aptly/public
+>
+>ErrorLog ${APACHE_LOG_DIR}/aptly_error.log
+>
+>CustomLog ${APACHE_LOG_DIR}/aptly_access.log combined
+>
+>    <Directory /opt/aptly/public>
+>    
+>  Options +Indexes +FollowSymLinks +MultiViews
+>       
+>  AllowOverride All
+>       
+>  Require all granted
+>       
+> </Directory>
+>    
+></VirtualHost>
  
  
 ### Использование:
