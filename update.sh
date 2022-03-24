@@ -38,7 +38,7 @@ echo -e "\033[37;1;41m   Запуск обновления. \033[0m"
 sed -i "s/$repover/$ver/" $deb/package/DEBIAN/control
 
 # устанавливаем необходимые для компиляции зависимости
-apt-get install libssl1.0-dev build-essential zlib1g-dev
+# apt-get install libssl1.0-dev build-essential zlib1g-dev
 
 # компилируем проект
 make
@@ -51,8 +51,8 @@ mv peervpn $deb/package/usr/local/bin/
 dpkg-deb --build $deb/package mypeervpn.deb
 
 #публикуем
-aptly repo add test2 mypeervpn.deb
-aptly publish update -skip-signing test2
+#aptly repo add test2 mypeervpn.deb
+#aptly publish update -skip-signing test2
 
 
 fi
