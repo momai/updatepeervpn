@@ -1,5 +1,5 @@
 Package: mypeervpn
-Version: 0.044
+Version: 0.043
 Section: unknown
 Priority: optional
 Depends: libc6, libssl1.0.0
