@@ -36,7 +36,7 @@
 Если такой возможности нет, но очень хочется опубликовать пакет повторно, необходимо подключиться к серверу репозитория и руками внести изменения в файл peervpn/globals.ic повысить цифру в define PEERVPN_VERSION_MINOR 44. И затем уже можно запускать перекомпил по команде ниже.
 
 
-**ssh momai@192.168.1.44 bash /home/momai/updatepeervpn/update.sh**
+**ssh momai@192.168.1.44 bash /opt/src/updatepeervpn/update.sh**
 
 Задание можно поставить в cron.
 
