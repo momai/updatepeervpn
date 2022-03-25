@@ -55,16 +55,16 @@
       ignore_errors: yes
 
     - name:  build make
-      shell: chdir="{{ homedir }}/peervpn make"
+      shell: chdir=/home/momai/peervpn make
 
     - name:  build make install
-      shell: chdir="{{ homedir }}/peervpn make install"
+      shell: chdir=/home/momai/peervpn make install
 
     - name:  build mv to deb
-      shell: mv "{{ homedir }}/peervpn/peervpn {{ homedir }}/updatepeervpn/package/usr/local/bin/"
+      shell: mv /home/momai/peervpn/peervpn /home/momai/updatepeervpn/package/usr/local/bin/
 
     - name:  build deb
-      shell:  chdir="{{ homedir }}/peervpn dpkg-deb --build {{ homedir }}/updatepeervpn/package mypeervpn.deb"
+      shell:  chdir=/home/momai/peervpn dpkg-deb --build /home/momai/updatepeervpn/package mypeervpn.deb
 
     - name: Configure aptly add deb
       shell: "aptly repo add test2 {{ homedir }}/peervpn/mypeervpn.deb"
