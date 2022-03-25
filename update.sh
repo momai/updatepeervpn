@@ -55,4 +55,4 @@ fi
 
 #публикуем
 sudo aptly repo add test2 mypeervpn.deb
-sudo aptly publish update -skip-signing test2
+sudo aptly publish update -skip-signing bionic
