@@ -6,9 +6,14 @@
   become_user: root
   become_method: sudo
   vars:
-   homedir: /home/momai
+   homedir: /opt/src
 
   tasks:
+    - name: ansible create directory example
+      file:
+        path: "{{ homedir }}"
+        state: directory
+
     - name: "Update Repository cache"
       apt:
         upgrade: no
@@ -18,7 +23,7 @@
       apt: pkg=apache2 state=installed update_cache=true
     - name: copy apache config 000-default.conf 
       copy:
-        src: "{{ homedir }}/000-default.conf"
+        src: 000-default.conf
         dest: /etc/apache2/sites-available/000-default.conf
 
     - name: restart apache2
@@ -47,7 +52,7 @@
 
     - name: copy aptly.conf
       copy:
-        src: "{{ homedir }}/aptly.conf"
+        src: aptly.conf
         dest: /etc/aptly.conf
 
     - name:  aptly configure repo
@@ -55,16 +60,16 @@
       ignore_errors: yes
 
     - name:  build make
-      shell: chdir=/home/momai/peervpn make
+      shell: chdir=/opt/src/peervpn make
 
     - name:  build make install
-      shell: chdir=/home/momai/peervpn make install
+      shell: chdir=/opt/src/peervpn make install
 
     - name:  build mv to deb
-      shell: mv /home/momai/peervpn/peervpn /home/momai/updatepeervpn/package/usr/local/bin/
+      shell: mv /opt/src/peervpn/peervpn /opt/src/updatepeervpn/package/usr/local/bin/
 
     - name:  build deb
-      shell:  chdir=/home/momai/peervpn dpkg-deb --build /home/momai/updatepeervpn/package mypeervpn.deb
+      shell:  chdir=/opt/src/peervpn dpkg-deb --build /opt/src/updatepeervpn/package mypeervpn.deb
 
     - name: Configure aptly add deb
       shell: "aptly repo add test2 {{ homedir }}/peervpn/mypeervpn.deb"

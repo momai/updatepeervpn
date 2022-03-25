@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #Абсолютный путь до peervpn
-peervpn=/home/momai/peervpn
+peervpn=/opt/src/peervpn
 
 #Абсолютный путь до данного скрипта
-deb=/home/momai/updatepeervpn
+deb=/opt/src/updatepeervpn
 
 #deb=echo pwd
 #echo $deb
