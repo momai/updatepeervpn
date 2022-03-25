@@ -1,0 +1,76 @@
+- import_playbook: bootstrap.yml
+- name: configure repo server
+  hosts: repo
+  remote_user: momai
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars:
+   homedir: /home/momai
+
+  tasks:
+    - name: "Update Repository cache"
+      apt:
+        upgrade: no
+        update_cache: yes
+
+    - name: Installs apache web server
+      apt: pkg=apache2 state=installed update_cache=true
+    - name: copy apache config 000-default.conf 
+      copy:
+        src: "{{ homedir }}/000-default.conf"
+        dest: /etc/apache2/sites-available/000-default.conf
+
+    - name: restart apache2
+      shell: systemctl restart apache2
+
+    - name: git peervpn
+      git:
+        repo: 'https://github.com/peervpn/peervpn.git'
+        dest: "{{ homedir }}/peervpn"
+        clone: yes
+        update: yes
+
+    - name: git updatepeervpn
+      git:
+        repo: 'https://github.com/momai/updatepeervpn.git'
+        dest: "{{ homedir }}/updatepeervpn"
+        clone: yes
+        update: yes
+        force: yes
+
+    - name: Installs зависимости
+      apt: pkg=zlib1g-dev,libssl1.0-dev,build-essential,make
+
+    - name: Installs aptly
+      apt: pkg=aptly state=installed update_cache=true
+
+    - name: copy aptly.conf
+      copy:
+        src: "{{ homedir }}/aptly.conf"
+        dest: /etc/aptly.conf
+
+    - name:  aptly configure repo
+      shell: aptly repo create -distribution="bionic" test2
+      ignore_errors: yes
+
+    - name:  build make
+      shell: chdir="{{ homedir }}/peervpn make"
+
+    - name:  build make install
+      shell: chdir="{{ homedir }}/peervpn make install"
+
+    - name:  build mv to deb
+      shell: mv "{{ homedir }}/peervpn/peervpn {{ homedir }}/updatepeervpn/package/usr/local/bin/"
+
+    - name:  build deb
+      shell:  chdir="{{ homedir }}/peervpn dpkg-deb --build {{ homedir }}/updatepeervpn/package mypeervpn.deb"
+
+    - name: Configure aptly add deb
+      shell: "aptly repo add test2 {{ homedir }}/peervpn/mypeervpn.deb"
+
+    - name:  aptly publish repo
+      shell: aptly publish repo -skip-signing=true test2
+
+    - name: rm tmp file
+      shell: "rm {{ homedir }}/updatepeervpn/package/usr/local/bin/peervpn {{ homedir }}/peervpn/mypeervpn.deb"
