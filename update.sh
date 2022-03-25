@@ -12,7 +12,7 @@ cd $peervpn
 
 #ls $deb/package/
 #Проверяем обновления.
-git pull https://github.com/peervpn/peervpn.git
+sudo git pull https://github.com/peervpn/peervpn.git
 
 #dir = /home/momai/peervpn
 #Определяем минорную версию исходников
@@ -35,24 +35,24 @@ echo -e "\033[37;1;41m   Версия в исходниках: $ver. \033[0m"
 echo -e "\033[37;1;41m   Запуск обновления. \033[0m"
 
 #заменяем номер весии на тот, что нашел в сырцах :)
-sed -i "s/$repover/$ver/" $deb/package/DEBIAN/control
+sudo sed -i "s/$repover/$ver/" $deb/package/DEBIAN/control
 
 # устанавливаем необходимые для компиляции зависимости
 # apt-get install libssl1.0-dev build-essential zlib1g-dev
 
 # компилируем проект
-make
-make install
+sudo make
+sudo make install
 
 #переносим собранное приложение в среду для сборки deb
-mv peervpn $deb/package/usr/local/bin/
+sudo mv peervpn $deb/package/usr/local/bin/
 
 #собираем deb
-dpkg-deb --build $deb/package mypeervpn.deb
+sudo dpkg-deb --build $deb/package mypeervpn.deb
 
 
 fi
 
 #публикуем
-aptly repo add test2 mypeervpn.deb
-aptly publish update -skip-signing test2
+sudo aptly repo add test2 mypeervpn.deb
+sudo aptly publish update -skip-signing test2
