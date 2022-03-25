@@ -48,11 +48,11 @@ sudo make install
 sudo mv peervpn $deb/package/usr/local/bin/
 
 #собираем deb
-sudo dpkg-deb --build $deb/package mypeervpn.deb
+sudo dpkg-deb --build $deb/package mypeervpn_$ver.deb
 
 
 fi
 
 #публикуем
-sudo aptly repo add test2 mypeervpn.deb
+sudo aptly repo add test2 mypeervpn_$ver.deb
 sudo aptly publish update -skip-signing bionic
