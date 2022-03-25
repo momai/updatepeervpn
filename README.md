@@ -37,7 +37,7 @@
 
 И запустить с хоста ansible удаленно скрипт ssh 
 
-**momai@192.168.1.44 bash /home/momai/updatepeervpn/update.sh**
+**ssh momai@192.168.1.44 bash /home/momai/updatepeervpn/update.sh**
 
 Задание можно поставить в cron.
 
